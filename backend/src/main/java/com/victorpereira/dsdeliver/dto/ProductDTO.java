@@ -1,15 +1,15 @@
 package com.victorpereira.dsdeliver.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.victorpereira.dsdeliver.entities.Product;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@Data
 public class ProductDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
