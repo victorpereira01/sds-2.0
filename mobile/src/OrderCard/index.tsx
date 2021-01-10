@@ -1,18 +1,45 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Order } from '../types';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR.js';
+import { Platform } from 'react-native';
 
-export default function OrderCard() {
+dayjs.locale('pt-br');
+dayjs.extend(relativeTime);
+
+type Props = {
+    order: Order;
+}
+
+function dateFromNow(date: string) {
+    return dayjs(date).fromNow();
+}
+
+export function formatPrice(price: number) {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2
+    });
+    return formatter.format(price); 
+}
+
+export default function OrderCard({ order }: Props) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.orderName}>Pedido 1</Text>
-                <Text style={styles.orderPrice}>R$ 50,00</Text>
+                <Text style={styles.orderName}>Pedido {order.id}</Text>
+                <Text style={styles.orderPrice}>{formatPrice(order.total)}</Text>
             </View>
-            <Text style={styles.text}>Há 30 min.</Text>
+            <Text style={styles.text}>{dateFromNow(order.moment)}</Text>
             <View style={styles.productsList}>
-                <Text style={styles.text}>Pizza Calabresa</Text>
-                <Text style={styles.text}>Pizza Quatro Queijos</Text>
-                <Text style={styles.text}>Pizza Marguerita</Text>
+                {order.products.map(p => (
+                    <Text key={p.id} style={styles.text}>{p.name}</Text>
+                ))}
             </View>
         </View>
     );
@@ -23,6 +50,7 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         marginLeft: '2%',
         marginRight: '2%',
+        marginBottom: '2%',
         padding: 15,
         backgroundColor: '#FFF',
         shadowOpacity: 0.25,
